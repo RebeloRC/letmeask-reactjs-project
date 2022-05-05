@@ -7,10 +7,11 @@ import google from '../assets/images/google-icon.svg'
 import { Button } from '../components/Button'
 import { useAuth } from '../hooks/useAuth'
 
-import '../styles/auth.scss'
 import { FormEvent, useState } from 'react'
 import { child, get, getDatabase, ref } from 'firebase/database'
 import { app } from '../services/firebase'
+
+import '../styles/auth.scss'
 
 export function Home() {
   const { user, signInWithGoogle } = useAuth()
