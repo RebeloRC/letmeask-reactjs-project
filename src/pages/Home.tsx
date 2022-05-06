@@ -17,7 +17,7 @@ export function Home() {
   const { user, signInWithGoogle } = useAuth()
   const [roomCode, setRoomCode] = useState('');
 
-  const database = getDatabase(app);
+//const database = getDatabase(app);
 
   const history = useHistory();
 
@@ -40,7 +40,7 @@ export function Home() {
 
     get(child(roomRef, `rooms/${roomCode}`)).then((snapshot) => {
       if (!snapshot.exists()) {
-        console.log('Sala invalida!');
+        alert('Sala invalida!');
         return;
       }
 
@@ -54,7 +54,7 @@ export function Home() {
         <strong>Crie salas de Q&amp;A ao vivo.</strong>
         <p>Tire duvidas de sua audiencia em tempo real.</p>
       </aside>
-      <main>
+      <main id='main-auth-page'>
         <div className='main-content'>
           <img src={logo} alt="letmeask"/>
           <button onClick={handleCreateRoom} className='create-room'>
