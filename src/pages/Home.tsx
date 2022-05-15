@@ -43,7 +43,7 @@ export function Home() {
         alert('Sala invalida!');
         return;
       }
-
+      
       history.push(`rooms/${roomCode}`)
     });
   }

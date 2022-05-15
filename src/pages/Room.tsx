@@ -5,38 +5,41 @@ import { useParams } from 'react-router-dom';
 import logo from '../assets/images/logo.svg';
 
 import { Button } from '../components/Button';
+import { Question } from '../components/Question';
 import { RoomCode } from '../components/RoomCode';
+
 import { useAuth } from '../hooks/useAuth';
 import { app } from '../services/firebase';
 
 import '../styles/room.scss';
 
-type Question = {
-  id: string;
-  auhtor: {
-    name: string;
-    avatar: string;
-  }
-  content: string;
-  isAnswered: boolean;
-  isHighLighted: boolean;
-}
+const database = getDatabase(app);
 
 type FirebaseQuestions = Record<string, {
-  auhtor: {
+  author: {
     name: string;
     avatar: string;
   }
   content: string;
   isAnswered: boolean;
-  isHighLighted: boolean;
+  isHighlighted: boolean;
 }>
+
+type Question = {
+  id: string;
+  author: {
+    name: string;
+    avatar: string;
+  }
+  content: string;
+  isAnswered: boolean;
+  isHighlighted: boolean;
+}
+
 
 type RoomParams = {
   id: string;
 }
-
-const database = getDatabase(app);
 
 export function Room(){
   const { user } = useAuth();
@@ -55,16 +58,19 @@ export function Room(){
       const databaseRoom = room.val();
       const firebaseQuestions: FirebaseQuestions = databaseRoom.questions;
 
-      const parsedQuestions = Object.entries(firebaseQuestions  ?? {}).map(([key, value]) => {
+      const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
         return {
           id: key,
           content: value.content,
-          author: value.auhtor,
-          isHighLighted: value.isHighLighted,
+          author: value.author,
+          isHighlighted: value.isHighlighted,
           isAnswered: value.isAnswered,
         }
       })
-      
+
+      setTitle(databaseRoom.title)
+      setQuestions(parsedQuestions)
+
       console.log(parsedQuestions)
     });
 
@@ -87,7 +93,7 @@ export function Room(){
         name: user.name,
         avatar: user.avatar,
       },
-      isHighLighted: false,
+      isHighlighted: false,
       isAnswered: false
     };
 
@@ -127,6 +133,17 @@ export function Room(){
           </div>
         </form>
 
+        <div className='question-list'>
+        {questions.map(question => {
+            return(
+              <Question
+                key={question.id}
+                content={question.content}
+                author={question.author}
+              />
+            )
+          })}
+        </div>
       </main>
     </div>
   );
